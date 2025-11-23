@@ -1,0 +1,1203 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Magnus Personal Dashboard | Register, Join & Start Earning Now</title>
+
+  <!-- Fonts & Tailwind -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --bg:#0B0B0D; --panel:#121214; --card-dark:#1E1F22; --card-brown:#3A2A22;
+      --text:#FFFFFF; --text-dim:#C8C8CC;
+      --accent-orange1:#FF8A1A; --accent-orange2:#FF5A00;
+      --accent-green:#2CC65C; --accent-green-d:#179444; --accent-red:#D12B2B;
+      --chip-amber:#FFB44C; --shadow:rgba(0,0,0,0.45);
+    }
+    *{ box-sizing:border-box; }
+    html,body{
+      margin:0;
+      padding:0;
+      background:#0B0B0D;
+      color:var(--text);
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+    }
+    body{
+      min-height:100vh;
+    }
+    .text-main{color:var(--text);}
+    .text-dim{color:var(--text-dim);}
+    .orangrad{background:linear-gradient(135deg,var(--accent-orange1),var(--accent-orange2));}
+    .shadow-soft{box-shadow:0 20px 36px -18px var(--shadow);}
+    .card-radius{border-radius:22px;}
+    .chip{border-radius:9999px;padding:.25rem .6rem;font-weight:700;font-size:.7rem;letter-spacing:.2px;}
+    .btn{border-radius:9999px;padding:.65rem 1.3rem;font-weight:700;font-size:.9rem;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);}
+    .btn-orange{background:linear-gradient(135deg,var(--accent-orange1),var(--accent-orange2));color:#111;}
+    .grain{
+      position:relative;
+      overflow:hidden;
+    }
+    .grain::before{
+      content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+      background:
+        repeating-linear-gradient(125deg,rgba(255,255,255,.035) 0 2px,transparent 2px 6px),
+        radial-gradient(1200px 400px at 20% -60%,rgba(255,255,255,.06),transparent 60%),
+        radial-gradient(800px 240px at 120% 0,rgba(255,255,255,.05),transparent 60%);
+      mix-blend-mode:overlay;opacity:.32;
+    }
+    .section-shell{
+      max-width:1120px;
+      margin:0 auto;
+      padding:3rem 1.25rem;
+    }
+    .badge-pill{
+      border-radius:9999px;
+      border:1px solid rgba(255,255,255,.16);
+      padding:.25rem .7rem;
+      font-size:.7rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+    }
+    .badge-dot{
+      width:6px;height:6px;border-radius:9999px;background:var(--accent-green);
+    }
+    .hero-title{
+      font-size:clamp(1.9rem,3.2vw,2.5rem);
+      line-height:1.1;
+      letter-spacing:-.03em;
+    }
+    .hero-sub{
+      font-size:.95rem;
+      color:var(--text-dim);
+    }
+    .stat-pill{
+      border-radius:9999px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:.3rem .9rem;
+      font-size:.8rem;
+      color:var(--text-dim);
+    }
+    .faq-item summary{
+      cursor:pointer;
+      list-style:none;
+    }
+    .faq-item summary::-webkit-details-marker{
+      display:none;
+    }
+  </style>
+</head>
+<body class="text-main">
+
+  <!-- PAGE WRAPPER -->
+  <div class="min-h-screen flex flex-col bg-gradient-to-b from-[#050507] via-[#0B0B0D] to-[#050507]">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-30 border-b border-white/5 bg-[#050507]/80 backdrop-blur">
+      <div class="section-shell flex items-center justify-between gap-4 py-3">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl orangrad grid place-items-center font-extrabold text-xs text-black shadow-soft">
+            MG
+          </div>
+          <div>
+            <div class="font-extrabold text-[1rem] leading-none">Magnus Personal Dashboard</div>
+            <div class="text-[11px] text-dim leading-none mt-1">Track your Magnus registration & earnings setup</div>
+          </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-5 text-[13px] text-dim">
+          <a href="#how" class="hover:text-white">How it works</a>
+          <a href="#plans" class="hover:text-white">Entry Plans</a>
+          <a href="#faq" class="hover:text-white">FAQs</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <!-- WhatsApp header link now controlled by JS variable -->
+          <a href="#" id="headerWaLink" class="hidden sm:inline-flex btn btn-ghost text-[12px] js-wa-link">
+            Chat PayFac
+          </a>
+          <button id="openApply" class="btn btn-orange text-[12px]">
+            Open My Dashboard
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1">
+
+      <!-- HERO -->
+      <section id="hero" class="section-shell pt-10 pb-12 md:pt-14 md:pb-16">
+        <div class="grid gap-10 md:grid-cols-[1.1fr,0.9fr] items-center">
+          <!-- Left -->
+          <div class="space-y-6">
+            <div class="badge-pill bg-white/5">
+              <span class="badge-dot"></span>
+              <span class="uppercase tracking-[0.16em] text-[10px] text-dim">
+                Magnus App · Personal Earnings Dashboard
+              </span>
+            </div>
+
+            <div class="space-y-4">
+              <h1 class="hero-title font-extrabold">
+                Welcome,
+                <span id="dashUserName" class="text-transparent bg-clip-text orangrad">
+                  New Magnus User
+                </span>
+              </h1>
+              <p class="hero-sub max-w-xl">
+                This is your <span class="font-semibold">personal Magnus dashboard</span>. Fill your details once,
+                choose your entry plan and get a verified PayFac account to start earning in NGN.
+              </p>
+            </div>
+
+            <div class="text-[11px] text-dim">
+              Current selected plan:
+              <span id="dashUserPlan" class="font-semibold text-white">Not selected yet</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button id="openApplyHero" class="btn btn-orange text-[13px]">
+                Update My Magnus Details
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <a href="#plans" id="viewPlansBtn" class="btn btn-ghost text-[13px]">
+                View & Choose Entry Plan
+              </a>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <div class="stat-pill flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-emerald-500/15 grid place-items-center text-[11px] text-emerald-300">₦</span>
+                <span>Example payout: <span class="font-semibold text-white">NGN179,992.80</span></span>
+              </div>
+              <div class="stat-pill flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-amber-500/20"></span>
+                <span>Verified PayFac · human support</span>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-dim">
+              This dashboard helps you register safely, pay to a verified account and monitor your Magnus setup without stress.
+            </div>
+          </div>
+
+          <!-- Right: Money / Trust Card -->
+          <div class="relative">
+            <div class="relative orangrad card-radius shadow-soft grain p-5 md:p-6">
+              <div class="absolute right-0 top-0 w-[45%] h-[45%] rounded-tr-[22px] bg-[#2a2a2c] opacity-30 translate-x-3 -translate-y-3 rotate-[18deg]"></div>
+
+              <div class="flex items-center gap-2 relative">
+                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/90 text-[#111] shadow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 7h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" stroke="#111" stroke-width="1.6" />
+                    <circle cx="12" cy="12" r="3.2" stroke="#111" stroke-width="1.6"/>
+                  </svg>
+                </span>
+                <span class="font-semibold text-[13px] text-black/90">Demo Withdrawal Snapshot</span>
+              </div>
+
+              <div class="mt-4 relative">
+                <div class="text-white text-[1.9rem] md:text-[2.2rem] font-extrabold leading-none drop-shadow-[0_2px_1px_rgba(0,0,0,.25)]">
+                  NGN179,992.80
+                </div>
+                <div class="mt-2 text-[11px] text-black/80">
+                  Example of what active Magnus users can withdraw after stacking tasks, skills and referrals.
+                </div>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2 text-[11px]">
+                <div class="chip bg-black/15 text-black/90 border border-black/10">Instant NGN payout</div>
+                <div class="chip bg-black/15 text-black/90 border border-black/10">Verified PayFac account</div>
+              </div>
+
+              <button id="openApplySide" class="mt-5 inline-flex items-center gap-2 bg-white/92 text-[#111] font-semibold rounded-full px-4 py-2 text-[12px] shadow-soft relative">
+                Open / Edit My Magnus Form
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Small floating trust card -->
+            <div class="absolute -bottom-8 right-2 w-[72%] bg-[#121214]/95 border border-white/10 rounded-2xl shadow-soft px-4 py-3 grain">
+              <div class="text-[11px] text-dim">
+                <span class="inline-flex items-center gap-1 font-semibold text-[11px] text-emerald-300">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  Live PayFac
+                </span>
+                is available on WhatsApp to verify your payment and help you complete your Magnus dashboard setup.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section id="how" class="section-shell pt-4 pb-10 md:pb-14">
+        <div class="grid md:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 class="text-[1.4rem] md:text-[1.6rem] font-extrabold mb-2">
+              How Your Magnus Dashboard Works
+            </h2>
+            <p class="text-[13px] text-dim max-w-[32rem]">
+              Use this personal dashboard to fill your details, pick your plan, pay to a verified account and submit
+              your payment proof — all in one place.
+            </p>
+          </div>
+          <div class="space-y-5 text-[13px]">
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full orangrad grid place-items-center text-[12px] text-black font-bold mt-0.5">1</div>
+              <div>
+                <h3 class="font-semibold text-[13px]">Fill your basic details</h3>
+                <p class="text-dim">
+                  Tap <span class="font-semibold text-white">Open My Dashboard</span>, enter your full name,
+                  WhatsApp number and email. This is saved for you and shown on this page.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full orangrad grid place-items-center text-[12px] text-black font-bold mt-0.5">2</div>
+              <div>
+                <h3 class="font-semibold text-[13px]">Choose your entry plan</h3>
+                <p class="text-dim">
+                  Select Lite, Pro or Business depending on how much you want to earn. Your chosen plan appears
+                  clearly on your personal dashboard.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full orangrad grid place-items-center text-[12px] text-black font-bold mt-0.5">3</div>
+              <div>
+                <h3 class="font-semibold text-[13px]">Pay to a verified PayFac account</h3>
+                <p class="text-dim">
+                  The system shows you a verified Magnus PayFac account. After payment, you submit your proof via
+                  Telegram, Email or WhatsApp using the buttons here.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full orangrad grid place-items-center text-[12px] text-black font-bold mt-0.5">4</div>
+              <div>
+                <h3 class="font-semibold text-[13px]">Start earning and withdrawing in NGN</h3>
+                <p class="text-dim">
+                  Once verified, you can start doing tasks, selling digital products, referring users and withdrawing
+                  directly in NGN from your Magnus account.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLANS -->
+      <section id="plans" class="section-shell pt-4 pb-12 md:pb-16">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+          <div>
+            <h2 class="text-[1.5rem] md:text-[1.7rem] font-extrabold mb-2">
+              Magnus Entry Plans (Nigeria)
+            </h2>
+            <p class="text-[13px] text-dim max-w-[32rem]">
+              Pick the plan that matches your budget and your earning target. You can upgrade later as you grow.
+            </p>
+          </div>
+          <div class="text-[11px] text-dim">
+            All plans come with access to Magnus Platform, NGN withdrawals and official Magnus community.
+          </div>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-3">
+          <!-- Lite -->
+          <article class="relative bg-[#1E1F22] grain card-radius p-5 border border-white/10 shadow-soft">
+            <div class="text-[11px] uppercase tracking-[0.16em] text-dim mb-2">
+              Magnus · Starter
+            </div>
+            <h3 class="text-[1.1rem] font-extrabold mb-1">Lite</h3>
+            <p class="text-[12px] text-dim mb-4">
+              Perfect if you want to test Magnus with a small budget and start earning immediately.
+            </p>
+            <div class="mb-3">
+              <div class="text-[13px] text-dim">Registration fee</div>
+              <div class="text-[1.25rem] font-extrabold">₦11,000</div>
+            </div>
+            <ul class="text-[12px] text-dim space-y-1.5 mb-5">
+              <li>✔ Full Magnus dashboard access</li>
+              <li>✔ Beginner-friendly earnings</li>
+              <li>✔ Starter training materials</li>
+              <li>✔ Access to Magnus Official Group</li>
+            </ul>
+            <button
+              class="btn btn-orange w-full text-[12px]"
+              data-select-plan="Lite"
+              data-plan-amount="₦11,000">
+              Select Lite &amp; Continue
+            </button>
+          </article>
+
+          <!-- Pro -->
+          <article class="relative bg-[#3A2A22] grain card-radius p-5 border border-amber-400/40 shadow-soft">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 chip"
+                 style="background:var(--chip-amber); color:#3a2500; box-shadow:0 6px 14px -8px rgba(0,0,0,.45);">
+              Most Popular
+            </div>
+            <div class="text-[11px] uppercase tracking-[0.16em] text-dim mb-2">
+              Magnus · Growth
+            </div>
+            <h3 class="text-[1.1rem] font-extrabold mb-1">Pro</h3>
+            <p class="text-[12px] text-dim mb-4">
+              Best for users who are serious about earning more and building a stable NGN income.
+            </p>
+            <div class="mb-3">
+              <div class="text-[13px] text-dim">Registration fee</div>
+              <div class="text-[1.25rem] font-extrabold">₦17,500</div>
+            </div>
+            <ul class="text-[12px] text-dim space-y-1.5 mb-5">
+              <li>✔ Everything in Lite</li>
+              <li>✔ Higher earning potentials</li>
+              <li>✔ Better referral rewards</li>
+              <li>✔ Priority PayFac attention</li>
+            </ul>
+            <button
+              class="btn btn-orange w-full text-[12px]"
+              data-select-plan="Pro"
+              data-plan-amount="₦17,500">
+              Select Pro &amp; Continue
+            </button>
+          </article>
+
+          <!-- Business -->
+          <article class="relative bg-[#1E1F22] grain card-radius p-5 border border-white/12 shadow-soft">
+            <div class="text-[11px] uppercase tracking-[0.16em] text-dim mb-2">
+              Magnus · Heavy earner
+            </div>
+            <h3 class="text-[1.1rem] font-extrabold mb-1">Business</h3>
+            <p class="text-[12px] text-dim mb-4">
+              Designed for people who want to push Magnus as a serious side business or full-time project.
+            </p>
+            <div class="mb-3">
+              <div class="text-[13px] text-dim">Registration fee</div>
+              <div class="text-[1.25rem] font-extrabold">₦28,500</div>
+            </div>
+            <ul class="text-[12px] text-dim space-y-1.5 mb-5">
+              <li>✔ Everything in Pro</li>
+              <li>✔ Highest earnings &amp; bonuses</li>
+              <li>✔ Team &amp; resale tools</li>
+              <li>✔ Fast-tracked support &amp; updates</li>
+            </ul>
+            <button
+              class="btn btn-orange w-full text-[12px]"
+              data-select-plan="Business"
+              data-plan-amount="₦28,500">
+              Select Business &amp; Continue
+            </button>
+          </article>
+        </div>
+
+        <div class="mt-5 text-[11px] text-dim">
+          After selecting a plan, your details and plan will be saved on this dashboard, then you&apos;ll see a verified
+          Magnus PayFac account and easy buttons to submit your payment proof.
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="section-shell pt-2 pb-12 md:pb-16">
+        <div class="grid gap-8 md:grid-cols-[1.1fr,0.9fr] items-start">
+          <div>
+            <h2 class="text-[1.4rem] md:text-[1.6rem] font-extrabold mb-2">
+              Magnus Platform · Quick FAQs
+            </h2>
+            <p class="text-[13px] text-dim max-w-[32rem]">
+              These are some of the common questions people ask before joining Magnus. Use them as a guide — and still
+              chat a verified PayFac on WhatsApp if you need more clarity.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <details class="faq-item bg-[#121214] rounded-2xl border border-white/10 px-4 py-3">
+              <summary class="flex items-center justify-between gap-3">
+                <span class="text-[13px] font-semibold">Is Magnus paying or is it a scam?</span>
+                <span class="text-[20px] leading-none text-dim">+</span>
+              </summary>
+              <div class="mt-2 text-[12px] text-dim">
+                Magnus Platform pays users who follow the correct registration process, pay to a verified account and
+                actively use the platform. This dashboard helps you avoid fake links and random accounts by guiding you
+                to a verified PayFac.
+              </div>
+            </details>
+
+            <details class="faq-item bg-[#121214] rounded-2xl border border-white/10 px-4 py-3">
+              <summary class="flex items-center justify-between gap-3">
+                <span class="text-[13px] font-semibold">How do I register on Magnus?</span>
+                <span class="text-[20px] leading-none text-dim">+</span>
+              </summary>
+              <div class="mt-2 text-[12px] text-dim">
+                Click <span class="font-semibold text-white">Open My Dashboard</span>, fill your details, select your
+                entry plan, then pay to the verified account shown on your screen. Afterwards, use the Submit Proof
+                button to send your evidence via Telegram, Email or WhatsApp for activation.
+              </div>
+            </details>
+
+            <details class="faq-item bg-[#121214] rounded-2xl border border-white/10 px-4 py-3">
+              <summary class="flex items-center justify-between gap-3">
+                <span class="text-[13px] font-semibold">Can I use OPay to pay for Magnus?</span>
+                <span class="text-[20px] leading-none text-dim">+</span>
+              </summary>
+              <div class="mt-2 text-[12px] text-dim">
+                Yes, if you choose the <span class="font-semibold text-white">OPay Bank</span> option on the payment
+                method screen. The system will show you a special account dedicated to OPay users. You can also choose
+                Other Banks if you prefer normal bank transfer.
+              </div>
+            </details>
+
+            <details class="faq-item bg-[#121214] rounded-2xl border border-white/10 px-4 py-3">
+              <summary class="flex items-center justify-between gap-3">
+                <span class="text-[13px] font-semibold">What happens after I pay?</span>
+                <span class="text-[20px] leading-none text-dim">+</span>
+              </summary>
+              <div class="mt-2 text-[12px] text-dim">
+                Once you pay, click <span class="font-semibold text-white">Submit Payment Proof</span> on this dashboard.
+                Choose Telegram, Email or WhatsApp, attach your screenshot, and send. A verified PayFac will confirm
+                your payment and complete your Magnus registration.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section class="section-shell pt-0 pb-12 md:pb-16">
+        <div class="bg-[#121214] border border-white/10 rounded-3xl shadow-soft grain px-5 py-6 md:px-8 md:py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-2 max-w-xl">
+            <h2 class="text-[1.3rem] md:text-[1.5rem] font-extrabold">
+              Ready to complete your Magnus dashboard today?
+            </h2>
+            <p class="text-[13px] text-dim">
+              Tap Open My Dashboard, choose your entry plan, pay to a verified Magnus PayFac account, and start earning
+              with your smartphone — without stress, confusion or scam fears.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <button id="openApplyBottom" class="btn btn-orange w-full sm:w-auto text-[13px]">
+              Open My Dashboard Form
+            </button>
+            <!-- WhatsApp CTA link now controlled by JS variable -->
+            <a href="#" class="btn btn-ghost w-full sm:w-auto text-[13px] js-wa-link">
+              Chat PayFac on WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 mt-auto">
+      <div class="section-shell py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-dim">
+        <div>© <span id="yearSpan"></span> Magnus Platform · All rights reserved.</div>
+        <div class="flex flex-wrap gap-3">
+          <span>Personal dashboard for Magnus registration &amp; entry plans.</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- APPLY NOW MODAL -->
+  <div id="applyOverlay" class="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <form id="applyForm" class="w-full max-w-md bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 p-6 space-y-4 relative">
+      <button type="button" id="closeApply" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 grid place-items-center text-[14px] text-dim">
+        ×
+      </button>
+      <div class="text-center">
+        <h1 class="text-2xl font-extrabold">My Magnus Details</h1>
+        <p class="text-sm text-[#C8C8CC] mt-1">
+          Fill these details so we can personalize your Magnus dashboard and payment verification.
+        </p>
+      </div>
+      <div class="space-y-1">
+        <label for="fullName" class="text-sm font-semibold">Full name</label>
+        <input id="fullName" name="fullName" type="text" required
+               class="w-full rounded-xl bg-white/10 ring-1 ring-white/10 focus:ring-2 focus:ring-[#FF8A1A] outline-none px-3 py-3 placeholder-white/40 text-sm"
+               placeholder="e.g. Janet Okafor" />
+      </div>
+      <div class="space-y-1">
+        <label for="phone" class="text-sm font-semibold">WhatsApp number</label>
+        <input id="phone" name="phone" type="tel" required
+               class="w-full rounded-xl bg-white/10 ring-1 ring-white/10 focus:ring-2 focus:ring-[#FF8A1A] outline-none px-3 py-3 placeholder-white/40 text-sm"
+               placeholder="e.g. 0707 162 7074" />
+      </div>
+      <div class="space-y-1">
+        <label for="email" class="text-sm font-semibold">Email</label>
+        <input id="email" name="email" type="email" required
+               class="w-full rounded-xl bg-white/10 ring-1 ring-white/10 focus:ring-2 focus:ring-[#FF8A1A] outline-none px-3 py-3 placeholder-white/40 text-sm"
+               placeholder="e.g. janet@example.com" />
+      </div>
+
+      <!-- Plan dropdown with preselected Pro but changeable -->
+      <div class="space-y-1">
+        <label for="applyPlan" class="text-sm font-semibold">Preferred Magnus Entry Plan</label>
+        <select id="applyPlan" name="applyPlan"
+                class="w-full rounded-xl bg-white/10 ring-1 ring-white/10 focus:ring-2 focus:ring-[#FF8A1A] outline-none px-3 py-3 text-sm">
+          <option value="Lite">Magnus Lite – ₦11,000 (Starter)</option>
+          <option value="Pro" selected>Magnus Pro – ₦17,500 (Most Popular)</option>
+          <option value="Business">Magnus Business – ₦28,500 (Heavy Earner)</option>
+        </select>
+      </div>
+
+      <button type="submit"
+              class="w-full orangrad text-[#111] font-extrabold rounded-2xl px-4 py-3 shadow-soft text-[13px]">
+        Save &amp; Continue to Payment
+      </button>
+      <p class="text-[11px] text-center text-[#C8C8CC]">
+        Your details are used to personalize your Magnus registration and PayFac verification.
+      </p>
+    </form>
+  </div>
+
+  <!-- PAYMENT METHOD MODAL -->
+  <div id="paymentMethodModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-sm bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <h3 class="text-lg font-extrabold">Choose Payment Method</h3>
+      </div>
+      <div class="px-6 py-5 space-y-4">
+        <p class="text-sm text-white/70">Select how you want to pay for your Magnus entry plan.</p>
+        <div class="space-y-3">
+          <!-- OPay -->
+          <button type="button" data-pay-method="opay" class="w-full flex items-center justify-between rounded-xl bg-[#22c55e1a] hover:bg-[#22c55e33] px-4 py-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-[#22C55E] grid place-items-center font-bold text-[#111] text-xs">OP</span>
+              <div class="text-left">
+                <div class="font-semibold text-sm">OPay Bank</div>
+                <div class="text-xs text-white/70">For OPay users only</div>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-white/80">Use</span>
+          </button>
+
+          <!-- Other Banks -->
+          <button type="button" data-pay-method="bank" class="w-full flex items-center justify-between rounded-xl bg-white/5 hover:bg-white/10 px-4 py-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-white/90 grid place-items-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="7" width="18" height="11" rx="2" stroke="#111" stroke-width="1.4"/>
+                  <path d="M3 11h18" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
+                  <path d="M9 5h6" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div class="text-left">
+                <div class="font-semibold text-sm">Other Banks</div>
+                <div class="text-xs text-white/70">Normal bank transfer</div>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-white/80">Use</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT CARD MODAL -->
+  <div id="payfacPaymentModal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <h3 class="text-lg font-extrabold">Complete Your Setup</h3>
+        <button id="closePaymentModal" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg-white/15">Close</button>
+      </div>
+      <div class="px-6 py-5 space-y-3" id="paymentCardBody">
+        <p class="text-sm">
+          Hi <span id="pfUserName" class="font-bold">there</span>, pay to this account to get started with Magnus.
+        </p>
+        <p class="text-xs text-dim">
+          Please transfer the exact amount for your selected plan. Keep your screenshot — you will submit it as proof.
+        </p>
+        <div class="grid grid-cols-1 gap-2 text-sm">
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Account number</div>
+              <div class="font-bold" id="pfAcctNo">6054080105</div>
+            </div>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctNo">Copy</button>
+          </div>
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Account Name</div>
+              <div class="font-bold" id="pfAcctName">Spino Clinton</div>
+            </div>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctName">Copy</button>
+          </div>
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Bank</div>
+              <div class="font-bold" id="pfBank">Moniepoint</div>
+            </div>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfBank">Copy</button>
+          </div>
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Amount to pay</div>
+              <div class="font-extrabold" id="pfAmount">₦0</div>
+            </div>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAmount">Copy</button>
+          </div>
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Payment duration</div>
+              <div class="font-semibold" id="pfDuration">
+                Pay now to lock your entry fee before any price increase. You start earning immediately after activation.
+              </div>
+              <div class="text-xs text-[#FF8A1A] mt-1" id="countdownTimer">01:00:00</div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-3 text-center">
+          <button id="submitPaymentProof" class="orangrad text-[#111] font-extrabold rounded-2xl px-5 py-3 shadow-soft text-[13px]">
+            Submit Payment Proof
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT PROOF OPTIONS MODAL -->
+  <div id="submitOptionsModal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-sm bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <h3 class="text-lg font-extrabold">Choose how to submit</h3>
+        <button type="button" id="closeSubmitOptions" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg-white/15">Close</button>
+      </div>
+      <div class="px-6 py-5 space-y-4">
+        <p class="text-sm text-white/70">
+          Select Telegram, Email or WhatsApp. Your details and payment summary will be filled in automatically.
+        </p>
+        <div class="space-y-3">
+          <button type="button" data-submit-channel="telegram" class="w-full flex items-center justify-between rounded-xl bg-[#229ED91a] hover:bg-[#229ED933] px-4 py-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-[#229ED9] grid place-items-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M20.5 4.5 3.8 11.2c-.7.3-.7 1.1-.1 1.4L8 14.8l1.8 4c.3.7 1.2.7 1.5 0l1.7-3.4 4.3 2.9c.6.4 1.4.1 1.6-.6l2.1-12.1c.1-.7-.5-1.2-1.3-.9Z" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/>
+                  <path d="m9 15 7-7-8.5 5" stroke="#111" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <div class="text-left">
+                <div class="font-semibold text-sm">Telegram</div>
+                <div class="text-xs text-white/70">Send via Telegram chat</div>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-white/80">Use</span>
+          </button>
+
+          <button type="button" data-submit-channel="email" class="w-full flex items-center justify-between rounded-xl bg-white/5 hover:bg-white/10 px-4 py-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-white/90 grid place-items-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="#111" stroke-width="1.4"/>
+                  <path d="M5 7.5 12 12l7-4.5" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div class="text-left">
+                <div class="font-semibold text-sm">Email</div>
+                <div class="text-xs text-white/70">Send as a detailed email</div>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-white/80">Use</span>
+          </button>
+
+          <button type="button" data-submit-channel="whatsapp" class="w-full flex items-center justify-between rounded-xl bg-[#25d3661a] hover:bg-[#25d36633] px-4 py-3">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-full bg-[#25D366] grid place-items-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3a9 9 0 0 0-9 9c0 1.6.4 3.1 1.2 4.4L3 21l4.8-1.2A9 9 0 1 0 12 3Z" stroke="#111" stroke-width="1.4"/>
+                  <path d="M9.5 9.2c-.2-.6-.5-.6-.8-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.5 0 1.5 1.1 3 1.3 3.2.2.2 2.1 3.2 5.1 4.3 2.5 1 3 1 3.5.9.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4-.1-.1-.2-.1-.5-.2s-1.7-.8-1.9-.9c-.2-.1-.4-.1-.6.1-.2.2-.7.9-.9 1-.2.1-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.7-1-2.3Z" fill="#111"/>
+                </svg>
+              </span>
+              <div class="text-left">
+                <div class="font-semibold text-sm">WhatsApp</div>
+                <div class="text-xs text-white/70">Chat a verified PayFac on WhatsApp</div>
+              </div>
+            </div>
+            <span class="text-xs font-semibold text-white/80">Use</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    (function(){
+
+      /* ========= GLOBAL CONFIG – EDIT THESE VARIABLES ONLY =========
+       *
+       * 1) CONTACT_ROTATION_ENABLED
+       *    - true  = rotate WhatsApp/Telegram PayFac numbers automatically
+       *    - false = always use the first number in each list
+       *
+       * 2) CONTACT_ROTATION_INTERVAL_MS
+       *    - How often to switch to the next PayFac number (in milliseconds)
+       *    - Example: 5 * 60 * 1000 = 5 minutes
+       *
+       * 3) WHATSAPP_NUMBERS_LOCAL / TELEGRAM_NUMBERS_LOCAL
+       *    - List of numbers in LOCAL format (starting with 0)
+       *    - The current index is used for both chat buttons & payment proof links
+       *
+       * 4) CONTACT_EMAIL
+       *    - Email address where payment proof can be sent
+       */
+
+      const CONTACT_ROTATION_ENABLED    = true;            // Set false to stop auto-changing numbers
+      const CONTACT_ROTATION_INTERVAL_MS = 5 * 60 * 1000;  // 5 minutes for next number
+
+      const WHATSAPP_NUMBERS_LOCAL = [
+        "09152304164",  // PayFac 1 (edit to your own)
+        "07071627074"   // PayFac 2 (optional; remove if not needed)
+      ];
+
+      const TELEGRAM_NUMBERS_LOCAL = [
+        "07037195976",  // Telegram PayFac 1
+        "09012345678"   // Telegram PayFac 2 (optional)
+      ];
+
+      const CONTACT_EMAIL = "magnuswebsite@site.com";  // Email for payment proof
+
+      // ========= END OF CONFIG (NO NEED TO EDIT BELOW THIS LINE) ========= //
+
+      function localToIntl(local){
+        // Convert "0XXXXXXXXXX" to "234XXXXXXXXXX"
+        return "234" + (local || "").replace(/^0/, "");
+      }
+
+      let contactIndex = 0;  // current position in arrays
+
+      function computeCurrentContacts(){
+        const waLocal = WHATSAPP_NUMBERS_LOCAL[contactIndex % WHATSAPP_NUMBERS_LOCAL.length] || WHATSAPP_NUMBERS_LOCAL[0];
+        const tgLocal = TELEGRAM_NUMBERS_LOCAL[contactIndex % TELEGRAM_NUMBERS_LOCAL.length] || TELEGRAM_NUMBERS_LOCAL[0];
+
+        const waInt = localToIntl(waLocal);
+        const tgInt = localToIntl(tgLocal);
+
+        return {
+          waLocal,
+          waInt,
+          waLink: "https://wa.me/" + waInt,
+          tgLocal,
+          tgInt,
+          tgLink: "https://t.me/" + tgInt,
+          email: CONTACT_EMAIL
+        };
+      }
+
+      let CURRENT_CONTACTS = computeCurrentContacts();
+
+      function applyContactsToDom(){
+        // All visible WhatsApp CTA buttons
+        const waLinks = document.querySelectorAll('.js-wa-link, #headerWaLink');
+        waLinks.forEach(el => {
+          if (!el) return;
+          el.setAttribute('href', CURRENT_CONTACTS.waLink);
+          el.setAttribute('target', '_blank');
+        });
+      }
+
+      // Apply first contacts immediately
+      applyContactsToDom();
+
+      // Rotate numbers if enabled
+      if (CONTACT_ROTATION_ENABLED && (WHATSAPP_NUMBERS_LOCAL.length > 1 || TELEGRAM_NUMBERS_LOCAL.length > 1)){
+        setInterval(function(){
+          contactIndex = (contactIndex + 1);
+          CURRENT_CONTACTS = computeCurrentContacts();
+          applyContactsToDom();
+        }, CONTACT_ROTATION_INTERVAL_MS);
+      }
+
+      // Year in footer
+      document.getElementById('yearSpan').textContent = new Date().getFullYear();
+
+      // APPLY MODAL OPEN/CLOSE
+      const applyOverlay = document.getElementById('applyOverlay');
+      const openApplyBtns = [
+        document.getElementById('openApply'),
+        document.getElementById('openApplyHero'),
+        document.getElementById('openApplySide'),
+        document.getElementById('openApplyBottom')
+      ].filter(Boolean);
+      const closeApplyBtn = document.getElementById('closeApply');
+
+      const viewPlansBtn = document.getElementById('viewPlansBtn');
+
+      let preselectedPlan = 'Pro';
+      let selectedPlan = null;
+      let selectedAmount = null;
+
+      const planAmountMap = {
+        'Lite': '₦11,000',
+        'Pro': '₦17,500',
+        'Business': '₦28,500'
+      };
+
+      function showApply(){
+        if (!applyOverlay) return;
+        const planSel = document.getElementById('applyPlan');
+        if (planSel && preselectedPlan){
+          planSel.value = preselectedPlan;
+        }
+        applyOverlay.classList.remove('hidden');
+        applyOverlay.classList.add('flex');
+      }
+      function hideApply(){
+        if (!applyOverlay) return;
+        applyOverlay.classList.add('hidden');
+        applyOverlay.classList.remove('flex');
+      }
+      function openApplyWithPlan(planKey){
+        preselectedPlan = planKey || 'Pro';
+        showApply();
+      }
+
+      openApplyBtns.forEach(btn => btn.addEventListener('click', function(){
+        // Open form directly (user chooses plan inside)
+        openApplyWithPlan(preselectedPlan || 'Pro');
+      }));
+
+      if (viewPlansBtn){
+        viewPlansBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          // Any click on "View & Choose Entry Plan" should open form first
+          openApplyWithPlan(selectedPlan || 'Pro');
+        });
+      }
+
+      if (closeApplyBtn) closeApplyBtn.addEventListener('click', hideApply);
+      if (applyOverlay){
+        applyOverlay.addEventListener('click', function(e){
+          if (e.target === applyOverlay) hideApply();
+        });
+      }
+
+      // PERSONAL DASHBOARD NAME + PLAN DISPLAY
+      function refreshDashboardHeader(){
+        let name = 'New Magnus User';
+        let plan = 'Not selected yet';
+        try{
+          const savedName = localStorage.getItem('magnus_apply_fullname');
+          const savedPlan = localStorage.getItem('magnus_apply_plan');
+          if (savedName) name = savedName;
+          if (savedPlan) plan = savedPlan;
+        }catch(_){}
+
+        const dashNameEl = document.getElementById('dashUserName');
+        const dashPlanEl = document.getElementById('dashUserPlan');
+        if (dashNameEl) dashNameEl.textContent = name;
+        if (dashPlanEl) dashPlanEl.textContent = plan;
+      }
+
+      // APPLY FORM SUBMIT
+      const form = document.getElementById('applyForm');
+
+      form && form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const fullName = (document.getElementById('fullName').value || '').trim();
+        const phone = (document.getElementById('phone').value || '').trim();
+        const email = (document.getElementById('email').value || '').trim();
+        const planSel = document.getElementById('applyPlan');
+        const chosenPlan = (planSel && planSel.value) ? planSel.value : 'Pro';
+
+        if (!fullName || !phone || !email) return;
+
+        try{
+          localStorage.setItem('magnus_apply_fullname', fullName);
+          localStorage.setItem('magnus_apply_phone', phone);
+          localStorage.setItem('magnus_apply_email', email);
+          localStorage.setItem('magnus_apply_plan', chosenPlan);
+        }catch(_){}
+
+        selectedPlan = chosenPlan;
+        selectedAmount = planAmountMap[selectedPlan] || '₦0';
+
+        // Update dashboard header name & plan
+        refreshDashboardHeader();
+
+        hideApply();
+        openPaymentCard(); // Go straight into payment flow for selected plan
+      });
+
+      // Prefill if saved
+      try{
+        const savedName = localStorage.getItem('magnus_apply_fullname');
+        const savedPhone = localStorage.getItem('magnus_apply_phone');
+        const savedEmail = localStorage.getItem('magnus_apply_email');
+        const savedPlan = localStorage.getItem('magnus_apply_plan');
+        if (savedName && document.getElementById('fullName')) document.getElementById('fullName').value = savedName;
+        if (savedPhone && document.getElementById('phone')) document.getElementById('phone').value = savedPhone;
+        if (savedEmail && document.getElementById('email')) document.getElementById('email').value = savedEmail;
+        if (savedPlan && document.getElementById('applyPlan')){
+          document.getElementById('applyPlan').value = savedPlan;
+          preselectedPlan = savedPlan;
+          selectedPlan = savedPlan;
+          selectedAmount = planAmountMap[selectedPlan] || '₦0';
+        }
+      }catch(_){}
+
+      // Initialize personal header on load
+      refreshDashboardHeader();
+
+      // PLAN SELECTION + PAYMENT FLOW
+      const payMethodModal = document.getElementById('paymentMethodModal');
+      const payModal = document.getElementById('payfacPaymentModal');
+      const closePayModalBtn = document.getElementById('closePaymentModal');
+      const nameEl = document.getElementById('pfUserName');
+      const amtEl = document.getElementById('pfAmount');
+
+      function showPayMethod(){
+        if (!payMethodModal) return;
+        payMethodModal.classList.remove('hidden');
+        payMethodModal.classList.add('flex');
+      }
+      function hidePayMethod(){
+        if (!payMethodModal) return;
+        payMethodModal.classList.add('hidden');
+        payMethodModal.classList.remove('flex');
+      }
+      function showPayModal(){
+        if (!payModal) return;
+        payModal.classList.remove('hidden');
+        payModal.classList.add('flex');
+      }
+      function hidePayModal(){
+        if (!payModal) return;
+        payModal.classList.add('hidden');
+        payModal.classList.remove('flex');
+      }
+
+      function openPaymentCard(){
+        let name = 'there';
+        try{
+          name = localStorage.getItem('magnus_apply_fullname') || 'there';
+        }catch(_){}
+        if (nameEl) nameEl.textContent = name;
+        if (amtEl) amtEl.textContent = selectedAmount || '₦0';
+
+        // Start at payment method selection
+        showPayMethod();
+      }
+
+      // Expose if needed
+      window.openPaymentCard = openPaymentCard;
+
+      // Handle click on Select Plan buttons (entry plan cards)
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('[data-select-plan]');
+        if (!btn) return;
+        selectedPlan = btn.getAttribute('data-select-plan') || null;
+        selectedAmount = btn.getAttribute('data-plan-amount') || planAmountMap[selectedPlan] || '₦0';
+
+        // Sync dropdown + local storage for dashboard
+        const planSel = document.getElementById('applyPlan');
+        if (planSel && selectedPlan){
+          planSel.value = selectedPlan;
+          try{ localStorage.setItem('magnus_apply_plan', selectedPlan); }catch(_){}
+        }
+
+        // Refresh top display and open form FIRST (user must fill/confirm details)
+        refreshDashboardHeader();
+        openApplyWithPlan(selectedPlan);
+      });
+
+      // Close payment modal
+      closePayModalBtn && closePayModalBtn.addEventListener('click', hidePayModal);
+      if (payModal){
+        payModal.addEventListener('click', function(e){
+          if (e.target === payModal) hidePayModal();
+        });
+      }
+
+      // Payment method selection (OPay vs Bank)
+      const acctNoEl   = document.getElementById('pfAcctNo');
+      const acctNameEl = document.getElementById('pfAcctName');
+      const bankEl     = document.getElementById('pfBank');
+
+      const paymentMethods = {
+        opay: {
+          acctNo: '6416620475',
+          acctName: 'Spino Clinton',
+          bank: 'Opay Bank'
+        },
+        bank: {
+          acctNo: acctNoEl ? acctNoEl.textContent.trim() : '6054080105',
+          acctName: acctNameEl ? acctNameEl.textContent.trim() : 'Spino Clinton',
+          bank: bankEl ? bankEl.textContent.trim() : 'Moniepoint'
+        }
+      };
+
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('[data-pay-method]');
+        if (!btn) return;
+        const methodKey = btn.getAttribute('data-pay-method');
+        const cfg = paymentMethods[methodKey];
+        if (!cfg) return;
+
+        if (acctNoEl)   acctNoEl.textContent   = cfg.acctNo;
+        if (acctNameEl) acctNameEl.textContent = cfg.acctName;
+        if (bankEl)     bankEl.textContent     = cfg.bank;
+
+        hidePayMethod();
+        showPayModal();
+      });
+
+      // Close payment method if needed
+      if (payMethodModal){
+        payMethodModal.addEventListener('click', function(e){
+          if (e.target === payMethodModal){
+            hidePayMethod();
+          }
+        });
+      }
+
+      // Copy buttons
+      document.addEventListener('click', async function(e){
+        const copyBtn = e.target.closest('button[data-copy-target]');
+        if (!copyBtn) return;
+        const sel = copyBtn.getAttribute('data-copy-target');
+        const target = document.querySelector(sel);
+        if (!target) return;
+        const text = (target.textContent || '').trim();
+        try{
+          await navigator.clipboard.writeText(text);
+          const original = copyBtn.textContent;
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = original, 1200);
+        }catch(_){
+          alert('Copy failed. Long-press to copy manually.');
+        }
+      });
+
+      // Submit payment proof -> open options
+      const submitBtn = document.getElementById('submitPaymentProof');
+      submitBtn && submitBtn.addEventListener('click', function(){
+        let name = 'there', phone = '', email = '';
+        try{
+          name = localStorage.getItem('magnus_apply_fullname') || 'there';
+          phone = localStorage.getItem('magnus_apply_phone') || '';
+          email = localStorage.getItem('magnus_apply_email') || '';
+        }catch(_){}
+        const plan = selectedPlan || (localStorage.getItem && localStorage.getItem('magnus_apply_plan')) || 'Not selected';
+        const amount = selectedAmount || planAmountMap[plan] || '₦0';
+
+        const acctNo = (acctNoEl && acctNoEl.textContent || '').trim();
+        const acctName = (acctNameEl && acctNameEl.textContent || '').trim();
+        const bank = (bankEl && bankEl.textContent || '').trim();
+        const duration = (document.getElementById('pfDuration')?.textContent || '').trim();
+
+        const msg =
+`Hello Verified PayFac, please verify my Magnus payment.
+
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+Selected Plan: ${plan}
+Amount: ${amount}
+
+Payment account I used:
+Account number: ${acctNo}
+Account Name: ${acctName}
+Bank: ${bank}
+
+Extra note: ${duration}
+
+I will now send my proof of payment (screenshot/file). Please help me activate my Magnus account.`;
+
+        window.__magnusProofMsg = msg || '';
+
+        const optModal = document.getElementById('submitOptionsModal');
+        if (optModal){
+          optModal.classList.remove('hidden');
+          optModal.classList.add('flex');
+        }
+      });
+
+      // Submit options channel selection
+      const submitOptionsModal = document.getElementById('submitOptionsModal');
+      const closeSubmitOptionsBtn = document.getElementById('closeSubmitOptions');
+
+      closeSubmitOptionsBtn && closeSubmitOptionsBtn.addEventListener('click', function(){
+        submitOptionsModal.classList.add('hidden');
+        submitOptionsModal.classList.remove('flex');
+      });
+      submitOptionsModal && submitOptionsModal.addEventListener('click', function(e){
+        if (e.target === submitOptionsModal){
+          submitOptionsModal.classList.add('hidden');
+          submitOptionsModal.classList.remove('flex');
+        }
+      });
+
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('[data-submit-channel]');
+        if (!btn) return;
+        const channel = btn.getAttribute('data-submit-channel');
+        const msg = window.__magnusProofMsg || '';
+        if (!msg) return;
+
+        submitOptionsModal.classList.add('hidden');
+        submitOptionsModal.classList.remove('flex');
+
+        if (channel === 'whatsapp'){
+          const url = CURRENT_CONTACTS.waLink + "?text=" + encodeURIComponent(msg);
+          window.location.href = url;
+        } else if (channel === 'email'){
+          const emailTo = CURRENT_CONTACTS.email;
+          const subject = "Magnus Payment Proof Verification";
+          const url = "mailto:" + emailTo + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
+          window.location.href = url;
+        } else if (channel === 'telegram'){
+          const url = CURRENT_CONTACTS.tgLink + "?text=" + encodeURIComponent(msg);
+          window.location.href = url;
+        }
+      });
+
+      // COUNTDOWN TIMER when payment modal is visible
+      (function(){
+        var timerEl = document.getElementById('countdownTimer');
+        if (!timerEl || !payModal) return;
+
+        function startCountdown(){
+          // You can change countdown duration here (in seconds)
+          var remaining = 3600; // 1 hour
+          if (window._pfCountdown) clearInterval(window._pfCountdown);
+          function update(){
+            var h = String(Math.floor(remaining / 3600)).padStart(2,'0');
+            var m = String(Math.floor((remaining % 3600) / 60)).padStart(2,'0');
+            var s = String(remaining % 60).padStart(2,'0');
+            timerEl.textContent = h + ":" + m + ":" + s;
+            if (remaining <= 0){
+              clearInterval(window._pfCountdown);
+              timerEl.textContent = "Expired";
+              timerEl.classList.add("text-red-400");
+              return;
+            }
+            remaining--;
+          }
+          update();
+          window._pfCountdown = setInterval(update, 1000);
+        }
+
+        var obs = new MutationObserver(function(){
+          if (!payModal.classList.contains('hidden')){
+            startCountdown();
+          }
+        });
+        obs.observe(payModal, { attributes:true, attributeFilter:['class'] });
+      })();
+
+    })();
+  </script>
+</body>
+</html>

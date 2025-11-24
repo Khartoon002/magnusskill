@@ -107,7 +107,7 @@
       <section class="relative orangrad card-radius p-5 sm:p-6 shadow-soft vignette">
         <div class="absolute right-0 top-0 w-[42%] h-[42%] rounded-tr-[22px] bg-[#2a2a2c] opacity-35 translate-x-2 -translate-y-2 rotate-[18deg]"></div>
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 text-[#111]">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg:white/90 bg-white/90 text-[#111]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M4 7h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" stroke="#111" stroke-width="1.6" />
               <circle cx="12" cy="12" r="3.2" stroke="#111" stroke-width="1.6"/>
@@ -358,7 +358,7 @@
 
   <!-- Apply Now Overlay (non-destructive; sits on top and can be removed) -->
   <div id="applyOverlay" class="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <form id="applyForm" class="w-full max-w-md bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 p-6 space-y-4">
+    <form id="applyForm" class="w-full max-w-md bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 p-6 space-y-4">
       <div class="text-center">
         <h1 class="text-2xl font-extrabold">Apply Now</h1>
         <p class="text-sm text-[#C8C8CC] mt-1">Fill in your details to open your dashboard.</p>
@@ -978,8 +978,9 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
           const url = "mailto:" + emailTo + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
           window.location.href = url;
         } else if (channel === 'telegram'){
-          const tgLink = "https://t.me/2347037195976";
-          const url = tgLink + "?text=" + encodeURIComponent(msg);
+          // Telegram link to this number: 07037195976 with the proof-of-payment writeup
+          const tgNumber = "07037195976";
+          const url = "https://t.me/" + tgNumber + "?text=" + encodeURIComponent(msg);
           window.location.href = url;
         }
       });
@@ -1003,7 +1004,8 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
         });
       })();
     })();
-  </script><script>
+  </script>
+  <script>
 (function(){
   const methodModal = document.getElementById('paymentMethodModal');
   const payModal   = document.getElementById('payfacPaymentModal');
@@ -1067,7 +1069,6 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
       // Let the click bubble to the existing handler which selects the plan.
       // Prevent anchor navigation jump
       e.preventDefault();
-      // Manually trigger a click on the containing card to be explicit
       const card = sel.closest('button[data-plan]');
       if (card) card.click();
       return;
@@ -1260,4 +1261,4 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
 </script>
 
 </body>
-  </html>
+</html>

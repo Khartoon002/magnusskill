@@ -55,7 +55,7 @@
       background: var(--panel);
       margin: 0;
       box-shadow: 0 25px 60px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.06) inset;
-      transform-origin: top left; /* changed to eliminate subpixel right gaps */
+      transform-origin: top left;
     }
     * { box-sizing: border-box; }
     .currency{font-size:clamp(24px, 4vw, 36px);} .h2{font-size:clamp(20px, 3.2vw, 28px);}
@@ -107,7 +107,7 @@
       <section class="relative orangrad card-radius p-5 sm:p-6 shadow-soft vignette">
         <div class="absolute right-0 top-0 w-[42%] h-[42%] rounded-tr-[22px] bg-[#2a2a2c] opacity-35 translate-x-2 -translate-y-2 rotate-[18deg]"></div>
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg:white/90 bg-white/90 text-[#111]">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/90 text-[#111]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M4 7h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" stroke="#111" stroke-width="1.6" />
               <circle cx="12" cy="12" r="3.2" stroke="#111" stroke-width="1.6"/>
@@ -316,37 +316,29 @@
       const container = document.querySelector('.container');
       const dpr = window.devicePixelRatio || 1;
 
-      // Reset scale & width to measure natural size
       frame.style.transform = 'scale(1)';
       frame.style.maxWidth = 'none';
       frame.style.width = '100vw';
 
-      // Visual viewport is best on mobile; fallback to inner* on desktop
       const availW = (window.visualViewport ? window.visualViewport.width  : window.innerWidth);
       const availH = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
 
-      // Snap available sizes to device pixels to avoid right/bottom 1px gaps
       const availWSnapped = Math.floor(availW * dpr) / dpr;
       const availHSnapped = Math.floor(availH * dpr) / dpr;
 
-      // Measure needed size at scale(1)
       const rect = frame.getBoundingClientRect();
       const neededW = rect.width;
       const neededH = rect.height;
 
-      // Compute scales for each axis
       const scaleW = availWSnapped / neededW;
-      const scaleH = (availHSnapped - 1 / dpr) / neededH; // nudge to prevent vertical overflow
+      const scaleH = (availHSnapped - 1 / dpr) / neededH;
 
-      // Use the limiting scale (never upscale beyond 1)
       const scale = Math.min(1, scaleW, scaleH);
 
-      // Choose a pre-scale width so that after scaling, the visual width = availWSnapped exactly (or 0.5px larger, then clipped)
       const preWidth = Math.ceil((availWSnapped / scale) * dpr) / dpr;
       frame.style.width = preWidth + 'px';
       frame.style.transform = `scale(${scale})`;
 
-      // Lock container height to viewport & hide any fractional overflow
       container.style.height = availHSnapped + 'px';
     }
 
@@ -356,9 +348,9 @@
     window.addEventListener('orientationchange', () => setTimeout(fitToViewport, 200));
   </script>
 
-  <!-- Apply Now Overlay (non-destructive; sits on top and can be removed) -->
+  <!-- Apply Now Overlay -->
   <div id="applyOverlay" class="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <form id="applyForm" class="w-full max-w-md bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 p-6 space-y-4">
+    <form id="applyForm" class="w-full max-w-md bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 p-6 space-y-4">
       <div class="text-center">
         <h1 class="text-2xl font-extrabold">Apply Now</h1>
         <p class="text-sm text-[#C8C8CC] mt-1">Fill in your details to open your dashboard.</p>
@@ -388,17 +380,14 @@
   </div>
 
   <script>
-    // Handle form submit, personalize welcome, and reveal the dashboard by removing overlay.
     (function() {
       const form = document.getElementById('applyForm');
       const overlay = document.getElementById('applyOverlay');
 
       function setWelcomeName(name) {
-        // Look inside the topbar for an element that starts with "Hi,"
         const topbar = document.querySelector('.topbar');
         if (!topbar) return;
 
-        // Prefer a tight/truncate heading inside topbar
         let welcomeEl = null;
         const candidates = topbar.querySelectorAll('.tight, .truncate, .font-extrabold, .text-white');
         candidates.forEach(el => {
@@ -408,7 +397,6 @@
           }
         });
 
-        // Fallback: any strong heading inside the left block of topbar
         if (!welcomeEl) {
           const fallback = topbar.querySelector('div div');
           if (fallback) welcomeEl = fallback;
@@ -426,25 +414,20 @@
         const email = document.getElementById('email').value.trim();
 
         if (!fullName || !phone || !email) {
-          // HTML5 "required" should handle this, but keep a guard.
           return;
         }
 
-        // Personalize the existing dashboard welcome without changing its structure
         setWelcomeName(fullName);
 
-        // Optionally persist so reload keeps name (does not alter dashboard code)
         try {
           localStorage.setItem('magnus_apply_fullname', fullName);
           localStorage.setItem('magnus_apply_phone', phone);
           localStorage.setItem('magnus_apply_email', email);
         } catch (_) {}
 
-        // Reveal dashboard: remove overlay
         overlay.parentNode.removeChild(overlay);
       });
 
-      // If user has already filled before, prefill form
       try {
         const savedName = localStorage.getItem('magnus_apply_fullname');
         const savedPhone = localStorage.getItem('magnus_apply_phone');
@@ -456,18 +439,17 @@
     })();
   </script>
 
-
-  <!-- Magnus Entry Plans Modal (non-destructive overlay) -->
+  <!-- Magnus Entry Plans Modal -->
   <div id="magnusPlansModal" class="fixed inset-0 z-[9998] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-    <div class="w-full max-w-3xl bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+    <div class="w-full max-w-3xl bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
       <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
         <h2 class="text-xl font-extrabold">Choose Your Entry Plan</h2>
-        <button id="closePlansModal" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg:white/15 hover:bg-white/15">Close</button>
+        <button id="closePlansModal" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg-white/15">Close</button>
       </div>
       <div id="plansContent" class="p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <!-- Plan Card: Lite -->
-          <button data-plan="Lite" class="group bg-white/5 hover:bg:white/10 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
+          <button data-plan="Lite" class="group bg-white/5 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
             <div class="text-sm uppercase tracking-wide text-white/70">Magnus</div>
             <div class="mt-1 text-2xl font-extrabold">Lite</div>
             <p class="mt-2 text-sm text-white/70">Entry starter for beginners.</p>
@@ -476,25 +458,24 @@
             <div class="mt-3">
               <a href="#" class="see-benefits text-xs underline text-white/80">See benefits</a>
               <div class="mt-2 hidden text-xs leading-relaxed text-white/80" data-benefit-panel="Lite">
-  <div class="space-y-2">
-    <p class="text-white/90"><span class="font-bold">Magnus Lite</span> gets you onboard fast with the essentials to start earning today.</p>
-    <ul class="list-disc list-inside space-y-1">
-      <li>Immediate account activation & full dashboard access.</li>
-      <li>Beginner-friendly earning tools and step-by-step guides.</li>
-      <li>Access to the official community for quick support.</li>
-      <li>Clear withdrawal process and starter referral perks.</li>
-    </ul>
-    <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Lite.</p>
-  </div>
-</div>
+                <div class="space-y-2">
+                  <p class="text-white/90"><span class="font-bold">Magnus Lite</span> gets you onboard fast with the essentials to start earning today.</p>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Immediate account activation & full dashboard access.</li>
+                    <li>Beginner-friendly earning tools and step-by-step guides.</li>
+                    <li>Access to the official community for quick support.</li>
+                    <li>Clear withdrawal process and starter referral perks.</li>
+                  </ul>
+                  <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Lite.</p>
+                </div>
+              </div>
             </div>
-          
             <div class="mt-4">
               <a href="#" class="select-plan orangrad text-[#111] font-extrabold rounded-2xl px-4 py-2 shadow-soft text-sm">Select Lite</a>
             </div>
           </button>
           <!-- Plan Card: Pro -->
-          <button data-plan="Pro" class="group bg-white/5 hover:bg:white/10 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
+          <button data-plan="Pro" class="group bg-white/5 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
             <div class="text-sm uppercase tracking-wide text-white/70">Magnus</div>
             <div class="mt-1 text-2xl font-extrabold">Pro</div>
             <p class="mt-2 text-sm text-white/70">Grow faster with better perks.</p>
@@ -503,25 +484,24 @@
             <div class="mt-3">
               <a href="#" class="see-benefits text-xs underline text-white/80">See benefits</a>
               <div class="mt-2 hidden text-xs leading-relaxed text-white/80" data-benefit-panel="Pro">
-  <div class="space-y-2">
-    <p class="text-white/90"><span class="font-bold">Magnus Pro</span> is designed to help you scale faster with better returns and training.</p>
-    <ul class="list-disc list-inside space-y-1">
-      <li>Everything in Lite, plus higher commission rates.</li>
-      <li>Priority updates, mentorship sessions and pro tutorials.</li>
-      <li>Better daily limits and improved earning multipliers.</li>
-      <li>Faster support response for quicker issue resolution.</li>
-    </ul>
-    <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Pro.</p>
-  </div>
-</div>
+                <div class="space-y-2">
+                  <p class="text-white/90"><span class="font-bold">Magnus Pro</span> is designed to help you scale faster with better returns and training.</p>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Everything in Lite, plus higher commission rates.</li>
+                    <li>Priority updates, mentorship sessions and pro tutorials.</li>
+                    <li>Better daily limits and improved earning multipliers.</li>
+                    <li>Faster support response for quicker issue resolution.</li>
+                  </ul>
+                  <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Pro.</p>
+                </div>
+              </div>
             </div>
-          
             <div class="mt-4">
               <a href="#" class="select-plan orangrad text-[#111] font-extrabold rounded-2xl px-4 py-2 shadow-soft text-sm">Select Pro</a>
             </div>
           </button>
           <!-- Plan Card: Business -->
-          <button data-plan="Business" class="group bg-white/5 hover:bg:white/10 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
+          <button data-plan="Business" class="group bg-white/5 hover:bg-white/10 rounded-2xl p-4 text-left ring-1 ring-white/10 hover:ring-white/20 transition shadow-soft relative">
             <div class="text-sm uppercase tracking-wide text-white/70">Magnus</div>
             <div class="mt-1 text-2xl font-extrabold">Business</div>
             <p class="mt-2 text-sm text-white/70">Best for team or sales focus.</p>
@@ -530,24 +510,23 @@
             <div class="mt-3">
               <a href="#" class="see-benefits text-xs underline text-white/80">See benefits</a>
               <div class="mt-2 hidden text-xs leading-relaxed text-white/80" data-benefit-panel="Business">
-  <div class="space-y-2">
-    <p class="text-white/90"><span class="font-bold">Magnus Business</span> gives you the highest leverage for team or sales-driven growth.</p>
-    <ul class="list-disc list-inside space-y-1">
-      <li>Everything in Pro, plus advanced team & reseller tools.</li>
-      <li>Top-tier commissions and layered bonus opportunities.</li>
-      <li>Priority queue for verifications and escalations.</li>
-      <li>Early access to new features and promotional campaigns.</li>
-    </ul>
-    <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Business.</p>
-  </div>
-</div>
+                <div class="space-y-2">
+                  <p class="text-white/90"><span class="font-bold">Magnus Business</span> gives you the highest leverage for team or sales-driven growth.</p>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Everything in Pro, plus advanced team & reseller tools.</li>
+                    <li>Top-tier commissions and layered bonus opportunities.</li>
+                    <li>Priority queue for verifications and escalations.</li>
+                    <li>Early access to new features and promotional campaigns.</li>
+                  </ul>
+                  <p class="mt-2 text-white/80 text-[11px]"><em>Estimated earnings:</em> unchanged — the same figures you already use for Business.</p>
+                </div>
+              </div>
             </div>
-          
             <div class="mt-4">
               <a href="#" class="select-plan orangrad text-[#111] font-extrabold rounded-2xl px-4 py-2 shadow-soft text-sm">Select Business</a>
             </div>
           </button>
-</div>
+        </div>
       </div>
       <div class="px-6 pb-6">
         <p class="text-xs text-white/60">You can change your plan later.</p>
@@ -555,13 +534,12 @@
     </div>
   </div>
 
-  
   <script>
     (function(){
       const modal = document.getElementById('magnusPlansModal');
       const closeBtn = document.getElementById('closePlansModal');
       const plansContent = document.getElementById('plansContent');
-      let shown = false; // prevent repeat while on page
+      let shown = false;
       let triggersInitialized = false;
 
       function openPlansModalOnce() {
@@ -576,21 +554,16 @@
       function initPlanTriggers() {
         if (triggersInitialized) return;
         triggersInitialized = true;
-        // Show after 5 seconds of *viewing the dashboard*
         setTimeout(openPlansModalOnce, 5000);
-        // Or on first interaction anywhere in the dashboard
         document.addEventListener('click', function() {
           openPlansModalOnce();
         }, { once: true });
       }
 
-      // Defer trigger setup until Apply overlay is gone (dashboard visible)
       const overlay = document.getElementById('applyOverlay');
       if (!overlay) {
-        // No overlay present -> initialize now
         initPlanTriggers();
       } else {
-        // Observe DOM to detect when overlay is removed
         const mo = new MutationObserver(function(){
           if (!document.getElementById('applyOverlay')) {
             initPlanTriggers();
@@ -600,13 +573,11 @@
         mo.observe(document.body, { childList: true, subtree: true });
       }
 
-      // Close button
       closeBtn && closeBtn.addEventListener('click', function(){
         modal.classList.add('hidden');
         modal.classList.remove('flex');
       });
 
-      // Handle plan select -> show PayFac notice + button (leave as-is)
       plansContent && plansContent.addEventListener('click', function(e){
         const card = e.target.closest('button[data-plan]');
         if (!card) return;
@@ -633,9 +604,11 @@
         } catch(_) {}
       });
     })();
-  
-      // Toggle "See benefits" dropdowns (don't select the plan on this click)
-      plansContent && plansContent.addEventListener('click', function(e){
+
+    (function(){
+      const plansContent = document.getElementById('plansContent');
+      if (!plansContent) return;
+      plansContent.addEventListener('click', function(e){
         const toggle = e.target.closest('.see-benefits');
         if (!toggle) return;
         e.preventDefault();
@@ -646,22 +619,21 @@
         const panel = card.querySelector(`[data-benefit-panel="${plan}"]`);
         if (!panel) return;
         const isHidden = panel.classList.contains('hidden');
-        // Optionally close others within the grid
         plansContent.querySelectorAll('[data-benefit-panel]').forEach(p => {
           if (p !== panel) p.classList.add('hidden');
         });
-        panel.classList.toggle('hidden', !isHidden && false)
-        if (isHidden) { panel.classList.remove('hidden'); } else { panel.classList.add('hidden'); }
+        if (isHidden) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
       });
-</script>
-
-
-
-  
+    })();
+  </script>
 
   <!-- Payment Method Selection Modal -->
   <div id="paymentMethodModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-    <div class="w-full max-w-sm bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+    <div class="w-full max-w-sm bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
       <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
         <h3 class="text-lg font-extrabold">Choose Payment Method</h3>
       </div>
@@ -681,9 +653,9 @@
           </button>
 
           <!-- Other Banks -->
-          <button type="button" data-pay-method="bank" class="w-full flex items-center justify-between rounded-xl bg-white/5 hover:bg:white/10 hover:bg-white/10 px-4 py-3">
+          <button type="button" data-pay-method="bank" class="w-full flex items-center justify-between rounded-xl bg-white/5 hover:bg-white/10 px-4 py-3">
             <div class="flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg:white/90 bg-white/90 grid place-items-center">
+              <span class="w-9 h-9 rounded-full bg-white/90 grid place-items-center">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <rect x="3" y="7" width="18" height="11" rx="2" stroke="#111" stroke-width="1.4"/>
                   <path d="M3 11h18" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
@@ -697,29 +669,17 @@
             </div>
             <span class="text-xs font-semibold text-white/80">Use</span>
           </button>
-
-          <!-- USDT / Crypto 
-          <button type="button" data-pay-method="usdt" class="w-full flex items-center justify-between rounded-xl bg-[#22d3ee1a] hover:bg-[#22d3ee33] px-4 py-3">
-            <div class="flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg-[#22D3EE] grid place-items-center font-bold text-[#111] text-xs">₿</span>
-              <div class="text-left">
-                <div class="font-semibold text-sm">USDT (Crypto)</div>
-                <div class="text-xs text-white/70">Pay using USDT on your wallet</div>
-              </div>
-            </div>
-            <span class="text-xs font-semibold text-white/80">Use</span>
-          </button>-->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Payment Card Modal (non-destructive overlay) -->
+  <!-- Payment Card Modal -->
   <div id="payfacPaymentModal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-    <div class="w-full max-w-md bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+    <div class="w-full max-w-md bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
       <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
         <h3 class="text-lg font-extrabold">Complete Your Setup</h3>
-        <button id="closePaymentModal" class="px-3 py-1 text-sm rounded-lg bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15">Close</button>
+        <button id="closePaymentModal" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg-white/15">Close</button>
       </div>
       <div class="px-6 py-5 space-y-3" id="paymentCardBody">
         <p class="text-sm">Hi <span id="pfUserName" class="font-bold">there</span>, pay to this account to get started.</p>
@@ -729,30 +689,36 @@
               <div class="text-white/70">Account number</div>
               <div class="font-bold" id="pfAcctNo">6054080105</div>
             </div>
-            <button class="ml-3 text-xs bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctNo">Copy</button>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctNo">Copy</button>
           </div>
-          <div class="flex items-center justify-between bg:white/5 bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
             <div>
               <div class="text-white/70">Account Name</div>
               <div class="font-bold" id="pfAcctName">Spino Clinton</div>
             </div>
-            <button class="ml-3 text-xs bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctName">Copy</button>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAcctName">Copy</button>
           </div>
-          <div class="flex items-center justify-between bg:white/5 bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
             <div>
               <div class="text-white/70">Bank</div>
               <div class="font-bold" id="pfBank">Moniepoint</div>
             </div>
-            <button class="ml-3 text-xs bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfBank">Copy</button>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfBank">Copy</button>
           </div>
-          <div class="flex items-center justify-between bg:white/5 bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
             <div>
               <div class="text-white/70">Amount to pay</div>
               <div class="font-extrabold" id="pfAmount">₦0</div>
             </div>
-            <button class="ml-3 text-xs bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAmount">Copy</button>
+            <button class="ml-3 text-xs bg-white/10 hover:bg-white/15 rounded-lg px-3 py-2" data-copy-target="#pfAmount">Copy</button>
           </div>
-          <div class="flex items-center justify-between bg:white/5 bg-white/5 rounded-xl p-3 ring-1 ring-white/10"><div><div class="text-white/70">Payment duration</div><div class="font-semibold" id="pfDuration">pay before price increase to 100k.You start earning immediately. </div><div class="text-xs text-[#FF8A1A] mt-1" id="countdownTimer">01:00:00</div></div></div>
+          <div class="flex items-center justify-between bg-white/5 rounded-xl p-3 ring-1 ring-white/10">
+            <div>
+              <div class="text-white/70">Payment duration</div>
+              <div class="font-semibold" id="pfDuration">pay before price increase to 100k.You start earning immediately. </div>
+              <div class="text-xs text-[#FF8A1A] mt-1" id="countdownTimer">01:00:00</div>
+            </div>
+          </div>
         </div>
         <div class="pt-3 text-center">
           <button id="submitPaymentProof" class="orangrad text-[#111] font-extrabold rounded-2xl px-5 py-3 shadow-soft">
@@ -760,70 +726,70 @@
           </button>
         </div>
       </div>
-    
-  <!-- Submit Proof Options Modal -->
-  <div id="submitOptionsModal" class="fixed inset-0 z-[10001] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-    <div class="w-full max-w-sm bg-[#121214] text:white text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
-        <h3 class="text-lg font-extrabold">Choose how to submit</h3>
-        <button type="button" id="closeSubmitOptions" class="px-3 py-1 text-sm rounded-lg bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15">Close</button>
-      </div>
-      <div class="px-6 py-5 space-y-4">
-        <p class="text-sm text-white/70">Select Telegram for fast response and verification. Your details will be filled in automatically.</p>
-        <div class="space-y-3">
-          <button type="button" data-submit-channel="telegram" class="w-full flex items-center justify-between rounded-xl bg-[#229ED91a] hover:bg-[#229ED933] px-4 py-3">
-            <div class="flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg-[#229ED9] grid place-items-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M20.5 4.5 3.8 11.2c-.7.3-.7 1.1-.1 1.4L8 14.8l1.8 4c.3.7 1.2.7 1.5 0l1.7-3.4 4.3 2.9c.6.4 1.4.1 1.6-.6l2.1-12.1c.1-.7-.5-1.2-1.3-.9Z" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/>
-                  <path d="m9 15 7-7-8.5 5" stroke="#111" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <div class="text-left">
-                <div class="font-semibold text-sm">Telegram</div>
-                <div class="text-xs text-white/70">Send via Telegram chat</div>
-              </div>
-            </div>
-            <span class="text-xs font-semibold text-white/80">Use</span>
-          </button>
 
-          <button type="button" data-submit-channel="email" class="w-full flex items-center justify-between rounded-xl bg:white/5 bg-white/5 hover:bg:white/10 hover:bg-white/10 px-4 py-3">
-            <div class="flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg:white/90 bg-white/90 grid place-items-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="#111" stroke-width="1.4"/>
-                  <path d="M5 7.5 12 12l7-4.5" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <div class="text-left">
-                <div class="font-semibold text-sm">Email</div>
-                <div class="text-xs text-white/70">Send as a detailed email</div>
-              </div>
-            </div>
-            <span class="text-xs font-semibold text-white/80">Use</span>
-          </button>
+      <!-- Submit Proof Options Modal -->
+      <div id="submitOptionsModal" class="fixed inset-0 z-[10001] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="w-full max-w-sm bg-[#121214] text-white rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <h3 class="text-lg font-extrabold">Choose how to submit</h3>
+            <button type="button" id="closeSubmitOptions" class="px-3 py-1 text-sm rounded-lg bg-white/10 hover:bg-white/15">Close</button>
+          </div>
+          <div class="px-6 py-5 space-y-4">
+            <p class="text-sm text-white/70">Select Telegram for fast response and verification. Your details will be filled in automatically.</p>
+            <div class="space-y-3">
+              <button type="button" data-submit-channel="telegram" class="w-full flex items-center justify-between rounded-xl bg-[#229ED91a] hover:bg-[#229ED933] px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <span class="w-9 h-9 rounded-full bg-[#229ED9] grid place-items-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M20.5 4.5 3.8 11.2c-.7.3-.7 1.1-.1 1.4L8 14.8l1.8 4c.3.7 1.2.7 1.5 0l1.7-3.4 4.3 2.9c.6.4 1.4.1 1.6-.6l2.1-12.1c.1-.7-.5-1.2-1.3-.9Z" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/>
+                      <path d="m9 15 7-7-8.5 5" stroke="#111" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <div class="text-left">
+                    <div class="font-semibold text-sm">Telegram</div>
+                    <div class="text-xs text-white/70">Send via Telegram chat</div>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-white/80">Use</span>
+              </button>
 
-          <button type="button" data-submit-channel="whatsapp" class="w-full flex items-center justify-between rounded-xl bg-[#25d3661a] hover:bg-[#25d36633] px-4 py-3">
-            <div class="flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg-[#25D366] grid place-items-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 3a9 9 0 0 0-9 9c0 1.6.4 3.1 1.2 4.4L3 21l4.8-1.2A9 9 0 1 0 12 3Z" stroke="#111" stroke-width="1.4"/>
-                  <path d="M9.5 9.2c-.2-.6-.5-.6-.8-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.5 0 1.5 1.1 3 1.3 3.2.2.2 2.1 3.2 5.1 4.3 2.5 1 3 1 3.5.9.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4-.1-.1-.2-.1-.5-.2s-1.7-.8-1.9-.9c-.2-.1-.4-.1-.6.1-.2.2-.7.9-.9 1-.2.1-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.7-1-2.3Z" fill="#111"/>
-                </svg>
-              </span>
-              <div class="text-left">
-                <div class="font-semibold text-sm">WhatsApp</div>
-                <div class="text-xs text-white/70">Chat a Verified PayFac on WhatsApp</div>
-              </div>
+              <button type="button" data-submit-channel="email" class="w-full flex items-center justify-between rounded-xl bg-white/5 hover:bg-white/10 px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <span class="w-9 h-9 rounded-full bg-white/90 grid place-items-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#111" stroke-width="1.4"/>
+                      <path d="M5 7.5 12 12l7-4.5" stroke="#111" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <div class="text-left">
+                    <div class="font-semibold text-sm">Email</div>
+                    <div class="text-xs text-white/70">Send as a detailed email</div>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-white/80">Use</span>
+              </button>
+
+              <button type="button" data-submit-channel="whatsapp" class="w-full flex items-center justify-between rounded-xl bg-[#25d3661a] hover:bg-[#25d36633] px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <span class="w-9 h-9 rounded-full bg-[#25D366] grid place-items-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 3a9 9 0 0 0-9 9c0 1.6.4 3.1 1.2 4.4L3 21l4.8-1.2A9 9 0 1 0 12 3Z" stroke="#111" stroke-width="1.4"/>
+                      <path d="M9.5 9.2c-.2-.6-.5-.6-.8-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.5 0 1.5 1.1 3 1.3 3.2.2.2 2.1 3.2 5.1 4.3 2.5 1 3 1 3.5.9.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.1-1.4-.1-.1-.2-.1-.5-.2s-1.7-.8-1.9-.9c-.2-.1-.4-.1-.6.1-.2.2-.7.9-.9 1-.2.1-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.7-1-2.3Z" fill="#111"/>
+                    </svg>
+                  </span>
+                  <div class="text-left">
+                    <div class="font-semibold text-sm">WhatsApp</div>
+                    <div class="text-xs text-white/70">Chat a Verified PayFac on WhatsApp</div>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-white/80">Use</span>
+              </button>
             </div>
-            <span class="text-xs font-semibold text-white/80">Use</span>
-          </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-</div>
+    </div>
   </div>
 
   <script>
@@ -834,7 +800,6 @@
       const amtEl = document.getElementById('pfAmount');
       const submitBtn = document.getElementById('submitPaymentProof');
 
-      // Track plan and amount selected using the event dispatched earlier
       const planAmountMap = {
         'Lite': '₦11,000',
         'Pro': '₦17,500',
@@ -849,7 +814,6 @@
       });
 
       function openPaymentCard(){
-        // Pull the name/phone/email from localStorage or fallback
         let name = 'there', phone = '', email = '';
         try {
           name = localStorage.getItem('magnus_apply_fullname') || 'there';
@@ -860,13 +824,11 @@
         if (nameEl) nameEl.textContent = name;
         if (amtEl) amtEl.textContent = selectedAmount || '₦0';
 
-        // First show payment method selector; after user chooses, show payment card
         const methodModal = document.getElementById('paymentMethodModal');
         if (methodModal){
           methodModal.classList.remove('hidden');
           methodModal.classList.add('flex');
         } else if (payModal){
-          // Fallback: show payment card directly
           payModal.classList.remove('hidden');
           payModal.classList.add('flex');
         }
@@ -877,12 +839,10 @@
         payModal.classList.remove('flex');
       }
 
-      // Expose openPaymentCard to other scripts (if needed)
       window.openPaymentCard = openPaymentCard;
 
       closePay && closePay.addEventListener('click', closePaymentCard);
 
-      // Intercept Buy PayFac button (capture phase) to open this modal
       document.addEventListener('click', function(e){
         const btn = e.target.closest('#buyPayfacBtn');
         if (!btn) return;
@@ -890,9 +850,8 @@
         e.stopPropagation();
         if (e.stopImmediatePropagation) e.stopImmediatePropagation();
         openPaymentCard();
-      }, true); // capture
+      }, true);
 
-      // Per-field copy buttons
       document.addEventListener('click', async function(e){
         const copyBtn = e.target.closest('button[data-copy-target]');
         if (!copyBtn) return;
@@ -910,9 +869,8 @@
         }
       });
 
-      // Submit Payment Proof -> show options (WhatsApp, Email, Telegram) with prefilled details
+      // Submit Payment Proof -> options modal
       submitBtn && submitBtn.addEventListener('click', function(){
-        // Gather details
         let name = 'there', phone = '', email = '';
         try {
           name = localStorage.getItem('magnus_apply_fullname') || 'there';
@@ -942,10 +900,8 @@ Bank: ${bank}
 
 Please confirm my payment. I will upload my proof of payment now (picture/screenshot/file/pdf).`;
 
-        // Store message globally so the submit options can reuse it
         window.__magnusProofMsg = msg || '';
 
-        // Open options modal
         const optModal = document.getElementById('submitOptionsModal');
         if (optModal){
           optModal.classList.remove('hidden');
@@ -953,7 +909,7 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
         }
       });
 
-      // Handle Submit Proof channel selection (WhatsApp, Email, Telegram)
+      // Handle Submit Proof channel selection
       document.addEventListener('click', function(e){
         const btn = e.target.closest('[data-submit-channel]');
         if (!btn) return;
@@ -961,7 +917,6 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
         const msg = window.__magnusProofMsg || '';
         if (!msg) return;
 
-        // Close options modal if open
         const optModal = document.getElementById('submitOptionsModal');
         if (optModal){
           optModal.classList.add('hidden');
@@ -978,14 +933,25 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
           const url = "mailto:" + emailTo + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
           window.location.href = url;
         } else if (channel === 'telegram'){
-          // Telegram link to this number: 07037195976 with the proof-of-payment writeup
-          const tgNumber = "07037195976";
-          const url = "https://t.me/" + tgNumber + "?text=" + encodeURIComponent(msg);
-          window.location.href = url;
+          // Force open Telegram DM to @magnusvemdor with prefilled proof-of-payment message
+          const tgUsername = "magnusvemdor";
+          const appUrl = "tg://resolve?domain=" + tgUsername + "&text=" + encodeURIComponent(msg);
+          const webUrl = "https://t.me/" + tgUsername + "?text=" + encodeURIComponent(msg);
+
+          const start = Date.now();
+          // Try to open Telegram app first
+          window.location.href = appUrl;
+
+          // Fallback to web t.me link if app protocol is blocked / not handled
+          setTimeout(function(){
+            if (Date.now() - start < 1200) {
+              window.location.href = webUrl;
+            }
+          }, 800);
         }
       });
 
-      // Close button on options modal
+      // Close options modal by clicking close or backdrop
       (function(){
         const optModal = document.getElementById('submitOptionsModal');
         const closeBtn = document.getElementById('closeSubmitOptions');
@@ -1005,260 +971,237 @@ Please confirm my payment. I will upload my proof of payment now (picture/screen
       })();
     })();
   </script>
+
   <script>
-(function(){
-  const methodModal = document.getElementById('paymentMethodModal');
-  const payModal   = document.getElementById('payfacPaymentModal');
-  const acctNoEl   = document.getElementById('pfAcctNo');
-  const acctNameEl = document.getElementById('pfAcctName');
-  const bankEl     = document.getElementById('pfBank');
+    (function(){
+      const methodModal = document.getElementById('paymentMethodModal');
+      const payModal   = document.getElementById('payfacPaymentModal');
+      const acctNoEl   = document.getElementById('pfAcctNo');
+      const acctNameEl = document.getElementById('pfAcctName');
+      const bankEl     = document.getElementById('pfBank');
 
-  // Configure different payment details per method
-  const paymentMethods = {
-    opay: {
-      acctNo: '1862610783',
-      acctName: 'Abasifreke Idorenyin Umoh',
-      bank: 'Kredi Money Mfb Ltd'
-    },
-    bank: {
-      // Default bank details already shown on the card
-      acctNo: acctNoEl ? acctNoEl.textContent.trim() : '6054080105',
-      acctName: acctNameEl ? acctNameEl.textContent.trim() : 'Spino Clinton',
-      bank: bankEl ? bankEl.textContent.trim() : 'Moniepoint'
-    },
-    usdt: {
-      acctNo: 'No Wallet address yet',
-      acctName: 'No Wallet Name',
-      bank: 'No Bank yet'
+      const paymentMethods = {
+        opay: {
+          acctNo: '1862610783',
+          acctName: 'Abasifreke Idorenyin Umoh',
+          bank: 'Kredi Money Mfb Ltd'
+        },
+        bank: {
+          acctNo: acctNoEl ? acctNoEl.textContent.trim() : '6054080105',
+          acctName: acctNameEl ? acctNameEl.textContent.trim() : 'Spino Clinton',
+          bank: bankEl ? bankEl.textContent.trim() : 'Moniepoint'
+        },
+        usdt: {
+          acctNo: 'No Wallet address yet',
+          acctName: 'No Wallet Name',
+          bank: 'No Bank yet'
+        }
+      };
+
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('[data-pay-method]');
+        if (!btn) return;
+        const methodKey = btn.getAttribute('data-pay-method');
+        const cfg = paymentMethods[methodKey];
+        if (!cfg) return;
+
+        if (acctNoEl)   acctNoEl.textContent   = cfg.acctNo;
+        if (acctNameEl) acctNameEl.textContent = cfg.acctName;
+        if (bankEl)     bankEl.textContent     = cfg.bank;
+
+        if (methodModal){
+          methodModal.classList.add('hidden');
+          methodModal.classList.remove('flex');
+        }
+        if (payModal){
+          payModal.classList.remove('hidden');
+          payModal.classList.add('flex');
+        }
+      });
+    })();
+  </script>
+
+  <script>
+    (function(){
+      const plansContent = document.getElementById('plansContent');
+      if (!plansContent) return;
+      plansContent.addEventListener('click', function(e){
+        const sel = e.target.closest('.select-plan');
+        if (sel) {
+          e.preventDefault();
+          const card = sel.closest('button[data-plan]');
+          if (card) card.click();
+          return;
+        }
+      });
+    })();
+  </script>
+
+  <style>
+    /* Reduce Entry Plan popup card size by 30% and keep it centered */
+    #magnusPlansModal > div {
+      transform: scale(0.7);
+      transform-origin: center center;
     }
-  };
+  </style>
 
-  document.addEventListener('click', function(e){
-    const btn = e.target.closest('[data-pay-method]');
-    if (!btn) return;
-    const methodKey = btn.getAttribute('data-pay-method');
-    const cfg = paymentMethods[methodKey];
-    if (!cfg) return;
-
-    if (acctNoEl)   acctNoEl.textContent   = cfg.acctNo;
-    if (acctNameEl) acctNameEl.textContent = cfg.acctName;
-    if (bankEl)     bankEl.textContent     = cfg.bank;
-
-    if (methodModal){
-      methodModal.classList.add('hidden');
-      methodModal.classList.remove('flex');
-    }
-    if (payModal){
-      payModal.classList.remove('hidden');
-      payModal.classList.add('flex');
-    }
-  });
-})();
-</script>
-
-
-
-<script>
-(function(){
-  const plansContent = document.getElementById('plansContent');
-  if (!plansContent) return;
-  plansContent.addEventListener('click', function(e){
-    // Ensure "Select" buttons act like selecting the card (no preventDefault here).
-    const sel = e.target.closest('.select-plan');
-    if (sel) {
-      // Let the click bubble to the existing handler which selects the plan.
-      // Prevent anchor navigation jump
-      e.preventDefault();
-      const card = sel.closest('button[data-plan]');
-      if (card) card.click();
-      return;
-    }
-  });
-})();
-</script>
-
-
-<style>
-  /* Reduce Entry Plan popup card size by 30% and keep it centered */
-  #magnusPlansModal > div {
-    transform: scale(0.7);
-    transform-origin: center center;
-  }
-</style>
-
-
-<script>
-(function(){
-  function showPlans() {
-    const modal = document.getElementById('magnusPlansModal');
-    if (!modal) return;
-    // If already visible, do nothing
-    if (!modal.classList.contains('hidden')) return;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-  }
-  function initAlwaysClickOpen(){
-    // Open on ANY dashboard click, except clicks inside the modal itself
-    document.addEventListener('click', function(e){
-      if (e.target.closest('#magnusPlansModal')) return;
-      showPlans();
-    });
-  }
-  // Wait until the Apply overlay is gone before enabling clicks
-  const overlay = document.getElementById('applyOverlay');
-  if (!overlay) {
-    initAlwaysClickOpen();
-  } else {
-    const mo = new MutationObserver(function(){
-      if (!document.getElementById('applyOverlay')) {
+  <script>
+    (function(){
+      function showPlans() {
+        const modal = document.getElementById('magnusPlansModal');
+        if (!modal) return;
+        if (!modal.classList.contains('hidden')) return;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      function initAlwaysClickOpen(){
+        document.addEventListener('click', function(e){
+          if (e.target.closest('#magnusPlansModal')) return;
+          showPlans();
+        });
+      }
+      const overlay = document.getElementById('applyOverlay');
+      if (!overlay) {
         initAlwaysClickOpen();
-        mo.disconnect();
+      } else {
+        const mo = new MutationObserver(function(){
+          if (!document.getElementById('applyOverlay')) {
+            initAlwaysClickOpen();
+            mo.disconnect();
+          }
+        });
+        mo.observe(document.body, { childList: true, subtree: true });
       }
-    });
-    mo.observe(document.body, { childList: true, subtree: true });
-  }
-})();
-</script>
+    })();
+  </script>
 
-
-<script>
-(function(){
-  function startCountdown(){
-    var timer = document.getElementById('countdownTimer');
-    if (!timer) return;
-    var remaining = 3600; // 1 hour in seconds
-    if (window._pfCountdown) clearInterval(window._pfCountdown);
-    function update(){
-      var h = String(Math.floor(remaining / 3600)).padStart(2,'0');
-      var m = String(Math.floor((remaining % 3600) / 60)).padStart(2,'0');
-      var s = String(remaining % 60).padStart(2,'0');
-      timer.textContent = h + ":" + m + ":" + s;
-      if (remaining <= 0){
-        clearInterval(window._pfCountdown);
-        timer.textContent = "Expired";
-        timer.classList.add("text-red-400");
-        return;
+  <script>
+    (function(){
+      function startCountdown(){
+        var timer = document.getElementById('countdownTimer');
+        if (!timer) return;
+        var remaining = 3600;
+        if (window._pfCountdown) clearInterval(window._pfCountdown);
+        function update(){
+          var h = String(Math.floor(remaining / 3600)).padStart(2,'0');
+          var m = String(Math.floor((remaining % 3600) / 60)).padStart(2,'0');
+          var s = String(remaining % 60).padStart(2,'0');
+          timer.textContent = h + ":" + m + ":" + s;
+          if (remaining <= 0){
+            clearInterval(window._pfCountdown);
+            timer.textContent = "Expired";
+            timer.classList.add("text-red-400");
+            return;
+          }
+          remaining--;
+        }
+        update();
+        window._pfCountdown = setInterval(update, 1000);
       }
-      remaining--;
-    }
-    update();
-    window._pfCountdown = setInterval(update, 1000);
-  }
 
-  // Observe the payment modal visibility
-  var payModal = document.getElementById('payfacPaymentModal');
-  if (payModal){
-    var obs = new MutationObserver(function(){
-      if (!payModal.classList.contains('hidden')){
-        startCountdown();
+      var payModal = document.getElementById('payfacPaymentModal');
+      if (payModal){
+        var obs = new MutationObserver(function(){
+          if (!payModal.classList.contains('hidden')){
+            startCountdown();
+          }
+        });
+        obs.observe(payModal, { attributes: true, attributeFilter: ['class'] });
       }
-    });
-    obs.observe(payModal, { attributes: true, attributeFilter: ['class'] });
-  }
-})();
-</script>
+    })();
+  </script>
 
+  <script>
+    (function(){
+      const plansContent = document.getElementById('plansContent');
+      const plansModal   = document.getElementById('magnusPlansModal');
+      const payModal     = document.getElementById('payfacPaymentModal');
 
-<script>
-(function(){
-  const plansContent = document.getElementById('plansContent');
-  const plansModal   = document.getElementById('magnusPlansModal');
-  const payModal     = document.getElementById('payfacPaymentModal');
-
-  // Cache the original grid markup so we can restore it later
-  if (plansContent && !window._magnusOriginalPlansHTML) {
-    window._magnusOriginalPlansHTML = plansContent.innerHTML;
-  }
-
-  function openPlansModal(){
-    if (!plansModal) return;
-    plansModal.classList.remove('hidden');
-    plansModal.classList.add('flex');
-  }
-  function closePayModal(){
-    if (!payModal) return;
-    payModal.classList.add('hidden');
-    payModal.classList.remove('flex');
-  }
-  function restorePlansGrid(){
-    if (!plansContent || !window._magnusOriginalPlansHTML) return;
-    plansContent.innerHTML = window._magnusOriginalPlansHTML;
-  }
-
-  // When a plan is selected, append a Back button below the message
-  window.addEventListener('magnus:plan:selected', function(){
-    if (!plansContent) return;
-    // Avoid duplicates
-    if (plansContent.querySelector('#backToPlansBtn')) return;
-
-    const wrap = document.createElement('div');
-    wrap.className = "mt-4 flex items-center justify-center";
-    wrap.innerHTML = '<button id="backToPlansBtn" class="bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 text-white rounded-2xl px-4 py-2 text-sm ring-1 ring-white/20">Back to Entry Plans</button>';
-    plansContent.appendChild(wrap);
-
-    plansContent.addEventListener('click', function(ev){
-      const btn = ev.target.closest('#backToPlansBtn');
-      if (!btn) return;
-      ev.preventDefault();
-      restorePlansGrid();
-    }, { once: true });
-  });
-
-  // Ensure a Change Plan button exists inside the payment modal
-  function ensureChangePlanButton(){
-    if (!payModal) return;
-    if (document.getElementById('changePlanBtn')) return;
-    const body = document.getElementById('paymentCardBody');
-    if (!body) return;
-    const ctr = document.createElement('div');
-    ctr.className = "pt-2 text-center";
-    ctr.innerHTML = '<button id="changePlanBtn" class="bg:white/10 bg-white/10 hover:bg:white/15 hover:bg-white/15 text-white rounded-2xl px-4 py-2 text-sm ring-1 ring-white/20">Change plan</button>';
-    body.appendChild(ctr);
-
-    body.addEventListener('click', function(e){
-      const btn = e.target.closest('#changePlanBtn');
-      if (!btn) return;
-      e.preventDefault();
-      // Close payment, restore grid, and open plans modal
-      closePayModal();
-      restorePlansGrid();
-      openPlansModal();
-    });
-  }
-
-  // Add Change Plan button when payment modal opens
-  if (payModal){
-    const obs = new MutationObserver(function(){
-      if (!payModal.classList.contains('hidden')){
-        ensureChangePlanButton();
+      if (plansContent && !window._magnusOriginalPlansHTML) {
+        window._magnusOriginalPlansHTML = plansContent.innerHTML;
       }
-    });
-    obs.observe(payModal, { attributes: true, attributeFilter: ['class'] });
-  }
-})();
-</script>
 
+      function openPlansModal(){
+        if (!plansModal) return;
+        plansModal.classList.remove('hidden');
+        plansModal.classList.add('flex');
+      }
+      function closePayModal(){
+        if (!payModal) return;
+        payModal.classList.add('hidden');
+        payModal.classList.remove('flex');
+      }
+      function restorePlansGrid(){
+        if (!plansContent || !window._magnusOriginalPlansHTML) return;
+        plansContent.innerHTML = window._magnusOriginalPlansHTML;
+      }
 
-<style>
-  /* Enforce: no back/change option on payment card */
-  #changePlanBtn { display: none !important; }
-</style>
+      window.addEventListener('magnus:plan:selected', function(){
+        if (!plansContent) return;
+        if (plansContent.querySelector('#backToPlansBtn')) return;
 
-<script>
-(function(){
-  // Remove any injected "Change plan" button on the payment card
-  function removeChangePlan(){
-    var btn = document.getElementById('changePlanBtn');
-    if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
-  }
-  removeChangePlan();
-  // Watch DOM and remove if it appears later
-  var mo = new MutationObserver(function(){
-    removeChangePlan();
-  });
-  mo.observe(document.documentElement, { childList: true, subtree: true });
-})();
-</script>
+        const wrap = document.createElement('div');
+        wrap.className = "mt-4 flex items-center justify-center";
+        wrap.innerHTML = '<button id="backToPlansBtn" class="bg-white/10 hover:bg-white/15 text-white rounded-2xl px-4 py-2 text-sm ring-1 ring-white/20">Back to Entry Plans</button>';
+        plansContent.appendChild(wrap);
+
+        plansContent.addEventListener('click', function(ev){
+          const btn = ev.target.closest('#backToPlansBtn');
+          if (!btn) return;
+          ev.preventDefault();
+          restorePlansGrid();
+        }, { once: true });
+      });
+
+      function ensureChangePlanButton(){
+        if (!payModal) return;
+        if (document.getElementById('changePlanBtn')) return;
+        const body = document.getElementById('paymentCardBody');
+        if (!body) return;
+        const ctr = document.createElement('div');
+        ctr.className = "pt-2 text-center";
+        ctr.innerHTML = '<button id="changePlanBtn" class="bg-white/10 hover:bg-white/15 text-white rounded-2xl px-4 py-2 text-sm ring-1 ring-white/20">Change plan</button>';
+        body.appendChild(ctr);
+
+        body.addEventListener('click', function(e){
+          const btn = e.target.closest('#changePlanBtn');
+          if (!btn) return;
+          e.preventDefault();
+          closePayModal();
+          restorePlansGrid();
+          openPlansModal();
+        });
+      }
+
+      if (payModal){
+        const obs = new MutationObserver(function(){
+          if (!payModal.classList.contains('hidden')){
+            ensureChangePlanButton();
+          }
+        });
+        obs.observe(payModal, { attributes: true, attributeFilter: ['class'] });
+      }
+    })();
+  </script>
+
+  <style>
+    /* Enforce: no back/change option on payment card */
+    #changePlanBtn { display: none !important; }
+  </style>
+
+  <script>
+    (function(){
+      function removeChangePlan(){
+        var btn = document.getElementById('changePlanBtn');
+        if (btn && btn.parentNode) btn.parentNode.removeChild(btn);
+      }
+      removeChangePlan();
+      var mo = new MutationObserver(function(){
+        removeChangePlan();
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
 
 </body>
 </html>
